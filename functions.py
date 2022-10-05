@@ -8,4 +8,4 @@ def fib(n):    # write Fibonacci series up to n
     print()
 
 def privet(name):   # print 'privet' to a given name
-    return f'privet {name}'
+    print(f'privet {name}')
