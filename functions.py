@@ -40,6 +40,7 @@ def privet(name):   # print 'privet' to a given name
     print(f'privet {name}')
 
 
+
 def get_sensor_list(Pilot_id, X_train, print_active=False):
     """
     Функция печати и импорта в память всех номеров датчиков
