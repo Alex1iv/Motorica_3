@@ -82,10 +82,9 @@ def get_sensor_list(Pilot_id, X_train, print_active=False):
 
 def get_all_sensors_plot(Pilot_id, timesteps:list, X_train, plot_counter=1):
     """
-    Функция построения диаграммы показания датчиков. Аргументы функции:
+    Функция построения диаграммы показаний датчиков заданного временного периода. Аргументы функции:
     Pilot_id - номер пилота;
     timesteps - временной период;
-
     X_train - обучающая выборка;
     plot_counter - порядковый номер рисунка.
     """
