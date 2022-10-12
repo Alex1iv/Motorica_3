@@ -47,7 +47,7 @@ def get_sensor_list(Pilot_id, X_train, print_active=False):
     Pilot_id - номер пилота,
     X_train - обучающая выборка. 
     """
-    #mounts[1]['X_train']
+    
     df = pd.DataFrame(data = X_train[Pilot_id], index = [s for s in range(X_train[Pilot_id].shape[0])], 
                         columns = [s for s in range(X_train[Pilot_id].shape[1])]
     ).T
@@ -81,56 +81,40 @@ def get_sensor_list(Pilot_id, X_train, print_active=False):
 
 
 
-def get_all_sensors_plot(id, X_train, plot_counter):
+def get_all_sensors_plot(Pilot_id, timesteps:list, X_train, plot_counter=1):
     """
     Функция построения диаграммы показания датчиков. Аргументы функции:
-    id - номер наблюдения;
+    Pilot_id - номер пилота;
+    timesteps - временной период;
+
     X_train - обучающая выборка;
     plot_counter - порядковый номер рисунка.
     """
-    fig = px.line(data_frame=X_train[id].T)
+    
+    df = pd.DataFrame(data = X_train[Pilot_id], index = [s for s in range(X_train[Pilot_id].shape[0])], 
+                        columns = [s for s in range(X_train[Pilot_id].shape[1])]
+    )
+    
+    fig = px.line(data_frame=df.iloc[timesteps[0]:timesteps[1],:])
     
     fig.update_layout(
-        title=dict(text=f'Рис. {plot_counter}'+' - наблюдение ' + str(id), x=.5, y=0.05, xanchor='center'), 
+        title=dict(text=f'Рис. {plot_counter}'+' - наблюдение ' + str(Pilot_id), x=.5, y=0.05, xanchor='center'), 
         xaxis_title_text = 'Время, сек', yaxis_title_text = 'Показатель', # yaxis_range = [0, 3000],
         legend_title_text='Индекс <br>датчика',
         width=600, height=400,
         margin=dict(l=100, r=60, t=80, b=100),
     )
 
-    #fig.show()
+    fig.show()
 
     # сохраним результат в папке figures. Если такой папки нет, то создадим её
     if not os.path.exists("figures"):
         os.mkdir("figures")
 
-    fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
+    #fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
 
 
 
-def get_all_sensors_plot(pilot_id, X_train, plot_counter):
-    """
-    Функция построения диаграммы показания датчиков. Аргументы функции: 
-    id - номер наблюдения;
-    X_train - обучающая выборка;
-    plot_counter - порядковый номер рисунка.
-    """
-    fig = px.line(data_frame=X_train[pilot_id])
-    
-    fig.update_layout(
-        title=dict(text=f'Рис. {plot_counter}'+' - наблюдение ' + str(pilot_id), x=.5, y=0.05, xanchor='center'), 
-        xaxis_title_text = 'Время, сек', yaxis_title_text = 'Показатель', # yaxis_range = [0, 3000],
-        legend_title_text='Индекс <br>датчика',
-        width=600, height=400,
-        margin=dict(l=100, r=60, t=80, b=100),
-    )
 
-    #fig.show()
-    
-    # сохраним результат в папке figures. Если такой папки нет, то создадим её
-    if not os.path.exists("figures"):
-        os.mkdir("figures")
-
-    fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
 
 
