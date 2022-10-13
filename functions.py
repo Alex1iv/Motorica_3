@@ -110,3 +110,48 @@ def get_all_sensors_plot(Pilot_id, timesteps:list, X_train, plot_counter=1):
         os.mkdir("figures")
 
     #fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
+
+
+def get_active_passive_sensors_plot(Pilot_id, X_train, time_start=0, time_end=500, plot_counter=1):
+    """
+    Функция построения графика показаний активных и пассивных датчиков.
+    Аргумент функции:
+    id - номер наблюдения;
+    X_train - обучающая выборка;
+    plot_counter - порядковый номер рисунка.  
+    """
+    # списки сенсоров
+    active_sensors, passive_sensors = get_sensor_list(Pilot_id, X_train)  #, print_active=True
+
+    timesteps=[time_start, time_end]
+
+    df = pd.DataFrame(data = X_train[Pilot_id], index = [s for s in range(X_train[Pilot_id].shape[0])], 
+                        columns = [s for s in range(X_train[Pilot_id].shape[1])]
+    ).iloc[timesteps[0]:timesteps[1],:]
+    
+        
+    df_1 = pd.DataFrame(df[active_sensors], columns=active_sensors)
+    df_2 = pd.DataFrame(df[passive_sensors], columns=passive_sensors)
+
+   
+    fig = make_subplots(rows=1, cols=2, 
+                        subplot_titles=('активные датчики', 'пассивные датчики')
+    )
+    
+    for i in df_1.columns: fig.add_trace(go.Scatter(x=df_1.index, y=df_1[i], name=str(df[i].name)), row=1, col=1)
+
+    for i in df_2.columns: fig.add_trace(go.Scatter(x=df_2.index, y=df_2[i], name=str(df[i].name)), row=1, col=2)
+
+    fig.update_layout(title={'text':f'Рис. {plot_counter}'+' - Активные и пассивные датчики пилота ' + str(Pilot_id), 'x':0.5, 'y':0.05}
+    )
+
+    fig.update_layout(width=1000, height=400, legend_title_text ='Номер датчика',
+                        xaxis_title_text  = 'Время',  yaxis_title_text = 'Сигнал датчика', yaxis_range=  [0, 3500], 
+                        xaxis2_title_text = 'Время', yaxis2_title_text = 'Сигнал датчика', yaxis2_range= [0 , 200],
+                        margin=dict(l=100, r=60, t=80, b=100), 
+                        #showlegend=False # легенда загромождает картинку
+    )
+
+    fig.show()
+
+    #fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
