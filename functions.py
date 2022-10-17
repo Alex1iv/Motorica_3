@@ -81,19 +81,16 @@ def get_sensor_list(Pilot_id, X_train, print_active=False):
     return active_sensors, passive_sensors #, reliable_sensors, unreliable_sensors
 
 
-
-def get_all_sensors_plot(Pilot_id, X_train, time_start=0, time_end=500, plot_counter=1):
+    
+def get_all_sensors_plot(Pilot_id, timesteps:list, X_train, plot_counter=1):
     """
-    Функция построения диаграммы показания датчиков. Аргументы функции:
+    Функция построения диаграммы показаний датчиков заданного временного периода. Аргументы функции:
     Pilot_id - номер пилота;
-    timesteps - временной период;
+    timesteps - временной период, состоящий из 2 чисел;
     X_train - обучающая выборка;
     plot_counter - порядковый номер рисунка.
-    time_start - начало временного отрезка;
-    time_end - конец временного отрезка.
     """
     
-    timesteps=[time_start, time_end]
     df = pd.DataFrame(data = X_train[Pilot_id], index = [s for s in range(X_train[Pilot_id].shape[0])], 
                         columns = [s for s in range(X_train[Pilot_id].shape[1])]
     )
