@@ -155,3 +155,82 @@ def get_active_passive_sensors_plot(Pilot_id, X_train, time_start=0, time_end=50
     fig.show()
 
     #fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
+
+def plot_history(history):
+    
+    """
+    Функция визуализации процесса обучения модели       
+    """
+    f1_sc = history.history['f1']  
+    loss = history.history['loss']
+
+    f1_sc_val = history.history['val_f1'] # на валидационной выборке
+    val_loss = history.history['val_loss']
+
+    epochs = range(len(f1_sc))
+
+    # визуализация систем координат
+    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(13, 4))
+
+    ax[0].plot(epochs, loss, 'b', label='Training loss')
+    ax[0].plot(epochs, val_loss, 'r', label='Validation loss')
+    ax[0].set_title('Качество обучения модели')
+    ax[0].legend()
+
+    ax[1].plot(epochs, f1_sc, 'b', label='Training f1_score')
+    ax[1].plot(epochs, f1_sc_val, 'r', label='Training val_f1_score')
+    ax[1].set_title('Изменение f1_score') # изменение f1-score
+    ax[1].legend()
+
+    #fig.show()
+
+def get_gesture_prediction_plot(id_pilot, i, y_pred_train_nn_mean, plot_counter):
+    """
+    Функция построения графиков: датчики ОМГ, изменение класса жеста, вероятности появления жеста и предсказание
+    Агументы:
+    id_pilot = 3  # номер пилота
+    plot_counter = 1 # номер рисунка
+    i - номер наблюдениия
+    """
+    
+    mount = mounts[id_pilot]         # выбираем номер пилота
+    X_train_nn = mount['X_train_nn']
+    y_train_nn = mount['y_train_nn']
+    #y_pred_train_nn = mount['y_pred_train_nn']
+    #y_pred_train_nn_mean = np.mean(x_trn_pred_dict[id_pilot], axis=0)
+
+    fig, ax = plt.subplots(4, 1, sharex=True, figsize=(10, 8))
+    plt.suptitle(f'Рис. {plot_counter} - наблюдение {i} пилота {id_pilot}' , y=-0.01, fontsize=16)
+    
+    plt.subplots_adjust(  left=0.1,   right=0.9,
+                        bottom=0.1,     top=0.9,
+                        wspace=0.1,  hspace=0.4)
+ 
+    ax[0].plot(X_train_nn[i])
+    ax[0].set_title('Сигналы датчиков ОМГ')
+
+    ax[1].imshow(y_train_nn[i].T, origin="lower")
+    ax[1].set_aspect('auto')
+    ax[1].set_title('Класс / жест')
+    ax[1].set_yticks(
+        np.arange(5),
+        ['Open', 'Pistol', 'Thumb', 'OK', 'Grab']
+    )
+
+    ax[2].imshow(y_pred_train_nn_mean[i].T, origin="lower")
+    ax[2].set_aspect('auto')
+    ax[2].set_title('Предсказание вероятностей появления классов жестов')
+    ax[2].set_yticks(
+        np.arange(5),
+        ['Open', 'Pistol', 'Thumb', 'OK', 'Grab']
+    )
+
+    ax[3].plot(y_pred_train_nn_mean[i].argmax(axis=-1))
+    ax[3].set_aspect('auto')
+    ax[3].set_title('Предсказание классов жестов')
+    ax[3].set_yticks(
+        np.arange(5),
+        ['Open', 'Pistol', 'Thumb', 'OK', 'Grab']
+    )
+    ax[3].set_xlabel('Время')
+    plt.tight_layout()
