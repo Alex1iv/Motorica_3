@@ -184,13 +184,14 @@ def plot_history(history):
 
     #fig.show()
 
-def get_gesture_prediction_plot(id_pilot, i, y_pred_train_nn_mean, plot_counter):
+def get_gesture_prediction_plot(id_pilot, i, y_pred_train_nn_mean, mounts, plot_counter):
     """
     Функция построения графиков: датчики ОМГ, изменение класса жеста, вероятности появления жеста и предсказание
     Агументы:
     id_pilot = 3  # номер пилота
     plot_counter = 1 # номер рисунка
     i - номер наблюдениия
+    mounts - словарь с данными
     """
     
     mount = mounts[id_pilot]         # выбираем номер пилота
