@@ -52,4 +52,4 @@ __________________________________________
 
 - sample_submission.csv: файл примера загрузки предсказанных данных на Kaggle.
 
-
+**7)** [*y_test_submit_rnn_LSTM(0.69641).csv*](https://github.com/Alex1iv/Motorica_3/blob/main/y_test_submit_rnn_LSTM(0.69641).csv), [*y_test_submit_rnn_LSTM(0.68976).csv*](https://github.com/Alex1iv/Motorica_3/blob/main/y_test_submit_rnn_LSTM(0.68976).csv), [*y_test_submit_rnn_LSTM(0.6781).csv*](https://github.com/Alex1iv/Motorica_3/blob/main/y_test_submit_rnn_LSTM(0.6781).csv) - файлы с аггрегированными предиктами обученных моделей LSTM на тестовых данных, которые получили максимальнный score на Leaderboard при их сабмите. 
