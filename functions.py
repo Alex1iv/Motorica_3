@@ -263,10 +263,17 @@ def get_signal_derivative_plot(Pilot_id, time_start, time_end, sensors:list, mou
     # объединяем timesteps
     timesteps=[time_start, time_end]
     df_1 = pd.DataFrame(
-    data = X_train[Pilot_id], 
-    index = [s for s in range(X_train.shape[0])], 
-    columns = [s for s in range(X_train.shape[1])]
+        data = X_train, 
+        index = [s for s in range(X_train.shape[0])], 
+        columns = [s for s in range(X_train.shape[1])]
     ).iloc[timesteps[0]:timesteps[1],:][sensors]
+
+
+    df_2 = pd.DataFrame(
+        data = y_train, 
+        index = [s for s in range(y_train.shape[0])]
+    ).iloc[timesteps[0]:timesteps[1],:]
+
     
     # Нормализация данных
     scaler = StandardScaler()
@@ -280,8 +287,7 @@ def get_signal_derivative_plot(Pilot_id, time_start, time_end, sensors:list, mou
 
     for i in df_1.columns: 
         fig.add_trace(go.Scatter(x=df_1.index, y=df_1[i], name=str(df_1[i].name)), row=1, col=1)
-
-    df_2 = pd.DataFrame(data = y_train[Pilot_id], index = [s for s in range(y_train[Pilot_id].shape[0])]).iloc[timesteps[0]:timesteps[1],:]
+    
 
     for i in df_2.columns: 
         fig.add_trace(go.Scatter(x=df_1.index, y=df_2[i], name=str(df_1[i].name)), row=2, col=1)
