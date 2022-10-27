@@ -1,5 +1,6 @@
 # Motorica Advanced Gesture Classification
 ## Продвинутая задача классификации жестов
+### [Kaggle competition](https://www.kaggle.com/competitions/motorica-advanced-gesture-classification/leaderboard?)
 __________________________________________
 
 Проект реализован в последовательности ноутбуков и набора файлов:
@@ -12,7 +13,7 @@ __________________________________________
 **Возможно что-то еще нужно дописать после доработки файла**  
 
 
-**2)** В файле [*2_model_nn.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/2_model_nn.ipynb) развит подход к решению задачи на базе **baseline** с применением двух моделей нейросети. 
+**2)** В файле [*2_model_SRNN_LSTM.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/2_model_SRNN_LSTM.ipynb) развит подход к решению задачи на базе **baseline** с применением двух моделей нейросети. 
 
 В первой части ноутбука данные загружаются из архива и преобразуются с помощью библиотеки mne для последующей подачи данных на обучение. Далее последовательно обучаются две модели: 
 
@@ -36,11 +37,11 @@ __________________________________________
 
 В ноутбуке оставлены закомментированные ячейки с пометками и пояснениями для сохранения возможности запуска в Google Colab.
 
-**3)** Файл [*boxplots_clear_gests_sens_gest.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/boxplots_clear_gests_sens_gest.ipynb) с построением боксплотов "Статистика изменения характерных уровней датчиков в течение снятия показаний в разрезе жестов для выбранного пилота. Очищенные данные" и папка [*boxplots*](https://github.com/Alex1iv/Motorica_3/tree/main/boxplots) с боксплотами, построенными для всех пилотов. В том числе [*boxplots_sens_gest_pylot2_with_beaten.png*](https://github.com/Alex1iv/Motorica_3/blob/main/boxplots/boxplots_sens_gest_pylot2_with_beaten.png), построенный по данным 2-го пилота, еще не очищенным от битых участков. Обсуждение наблюдений - в общем файле с EDA [*1_EDA_sprint_3.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/1_EDA_sprint_3.ipynb).
+**3)** В ноутбуке [*3_embeddings.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/3_embeddings.ipynb) реализован предикт тестовых данных на модели, обученной для каждого пилота.
 
-**4)** [*3_rnn_baseline.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/3_rnn_baseline.ipynb)- ноутбук, предоставленный организаторами соревнования в качестве **baseline**.   
+**4)** Файл [*4_boxplots_clear_gests_sens_gest.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/4_boxplots_clear_gests_sens_gest.ipynb) с построением боксплотов "Статистика изменения характерных уровней датчиков в течение снятия показаний в разрезе жестов для выбранного пилота. Очищенные данные" и папка [*boxplots*](https://github.com/Alex1iv/Motorica_3/tree/main/boxplots) с боксплотами, построенными для всех пилотов. В том числе [*boxplots_sens_gest_pylot2_with_beaten.png*](https://github.com/Alex1iv/Motorica_3/blob/main/boxplots/boxplots_sens_gest_pylot2_with_beaten.png), построенный по данным 2-го пилота, еще не очищенным от битых участков. Обсуждение наблюдений - в общем файле с EDA [*1_EDA_sprint_3.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/1_EDA_sprint_3.ipynb).
 
-**5)** [*4_embeddings.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/4_embeddings.ipynb) - эмбеддинг обученных и сохраненных в проекте моделей на тестовых данных [архива](https://github.com/Alex1iv/Motorica_3/blob/main/data/motorica-advanced-gesture-classification.zip).
+**5)** [*5_rnn_baseline.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/5_rnn_baseline.ipynb) - ноутбук, предоставленный организаторами соревнования в качестве **baseline**.   
 
 **6)** Папка [*data*](https://github.com/Alex1iv/Motorica_3/tree/main/data) содержит [архив](https://github.com/Alex1iv/Motorica_3/blob/main/data/motorica-advanced-gesture-classification.zip) с исходными данными:
 
@@ -52,4 +53,10 @@ __________________________________________
 
 - sample_submission.csv: файл примера загрузки предсказанных данных на Kaggle.
 
-**7)** [*y_test_submit_rnn_LSTM(0.69641).csv*](https://github.com/Alex1iv/Motorica_3/blob/main/y_test_submit_rnn_LSTM(0.69641).csv), [*y_test_submit_rnn_LSTM(0.68976).csv*](https://github.com/Alex1iv/Motorica_3/blob/main/y_test_submit_rnn_LSTM(0.68976).csv), [*y_test_submit_rnn_LSTM(0.6781).csv*](https://github.com/Alex1iv/Motorica_3/blob/main/y_test_submit_rnn_LSTM(0.6781).csv) - файлы с аггрегированными предиктами обученных моделей LSTM на тестовых данных, которые получили максимальнный score на Leaderboard при их сабмите. 
+**7)** Файлы с агрегированными предиктами обученных моделей SRNN+LSTM на тестовых данных, показавшие максимальный score на Leaderboard при сабмите 
+
+[*y_test_submit_rnn_LSTM(0.69641).csv*](https://github.com/Alex1iv/Motorica_3/blob/main/y_test_submit_rnn_LSTM(0.69641).csv),
+
+[*y_test_submit_rnn_LSTM(0.68976).csv*](https://github.com/Alex1iv/Motorica_3/blob/main/y_test_submit_rnn_LSTM(0.68976).csv),
+
+[*y_test_submit_rnn_LSTM(0.6781).csv*](https://github.com/Alex1iv/Motorica_3/blob/main/y_test_submit_rnn_LSTM(0.6781).csv)
