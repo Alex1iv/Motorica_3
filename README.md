@@ -40,7 +40,9 @@ __________________________________________
 
 **4)** [*3_rnn_baseline.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/3_rnn_baseline.ipynb)- ноутбук, предоставленный организаторами соревнования в качестве **baseline**.   
 
-**5)** Папка [*data*](https://github.com/Alex1iv/Motorica_3/tree/main/data) содержит [архив](https://github.com/Alex1iv/Motorica_3/blob/main/data/motorica-advanced-gesture-classification.zip) с исходными данными:
+**5)** [*4_embedding.ipynb*](ссылка) - эмбеддинг обученных и сохраненных в проекте моделей на тестовых данных [архива](https://github.com/Alex1iv/Motorica_3/blob/main/data/motorica-advanced-gesture-classification.zip).
+
+**6)** Папка [*data*](https://github.com/Alex1iv/Motorica_3/tree/main/data) содержит [архив](https://github.com/Alex1iv/Motorica_3/blob/main/data/motorica-advanced-gesture-classification.zip) с исходными данными:
 
 - X_train_1.npy, X_train_2.npy, X_train_3.npy: файлы с тренировочными данными ("фичи", показания датчиков по каждому "пилоту");
 
