@@ -34,7 +34,10 @@ gestures = ['"open"',  # 0
             '"ok"',  # 3
             '"grab"',  # 4
             '"битые" данные',  # -1
-            ]
+]
+
+
+
 
 def privet(name):   # print 'privet' to a given name
     print(f'privet {name}')
@@ -235,3 +238,76 @@ def get_gesture_prediction_plot(id_pilot, i, y_pred_train_nn_mean, mounts, plot_
     )
     ax[3].set_xlabel('Время')
     plt.tight_layout()
+
+
+#Pilot_id = 1
+#time_start = 100
+#time_end = 600
+#sensors = list([0, 2, #5, 8, 12, 15, 17, 19, 21, 24, 27, 29, 30, 33, 36, 38
+#])
+
+#plot_counter = 6
+
+
+
+
+def get_signal_derivative_plot(Pilot_id, time_start, time_end, sensors:list, mounts,
+                               plot_counter=1):
+
+    """
+    
+    """
+    X_train=mounts[Pilot_id]['X_train']
+    y_train=mounts[Pilot_id]['y_train']
+
+    # объединяем timesteps
+    timesteps=[time_start, time_end]
+    df_1 = pd.DataFrame(
+    data = X_train[Pilot_id], 
+    index = [s for s in range(X_train.shape[0])], 
+    columns = [s for s in range(X_train.shape[1])]
+    ).iloc[timesteps[0]:timesteps[1],:][sensors]
+    
+    # Нормализация данных
+    scaler = StandardScaler()
+    scaler.fit(df_1)
+    df_1 = pd.DataFrame(scaler.transform(df_1))
+
+    fig = make_subplots(rows=2, cols=2, 
+        subplot_titles=(f'X_train - нормализованные сигналы', 'y_train', 
+        f'Производная нормализованных сигналов датчиков', f'Квадрат производной нормализованных сигналов датчиков'), vertical_spacing = 0.1,
+    )
+
+    for i in df_1.columns: 
+        fig.add_trace(go.Scatter(x=df_1.index, y=df_1[i], name=str(df_1[i].name)), row=1, col=1)
+
+    df_2 = pd.DataFrame(data = y_train[Pilot_id], index = [s for s in range(y_train[Pilot_id].shape[0])]).iloc[timesteps[0]:timesteps[1],:]
+
+    for i in df_2.columns: 
+        fig.add_trace(go.Scatter(x=df_1.index, y=df_2[i], name=str(df_1[i].name)), row=2, col=1)
+
+
+    df_3 = pd.DataFrame(df_1.diff(), index = range(df_1.index[0], df_1.index[-1]+1))
+
+
+    for i in df_3.columns: 
+        fig.add_trace(go.Scatter(x=df_1.index, y=df_1[i], name=str(df_1[i].name)), row=1, col=2)
+
+    #  датасет квадрата производной
+    df_4 = pd.DataFrame(np.power(df_1.diff(),2), index = range(df_1.index[0], df_1.index[-1]+1))
+
+    for i in df_4.columns: 
+        fig.add_trace(go.Scatter(x=df_1.index, y=df_4[i], name=str(df_4[i].name)), row=2, col=2)
+
+    fig.update_layout(title={'text':f'Рис. {plot_counter} - Нормализованные сигналы датчиков {sensors} пилота {Pilot_id}', 
+    'x':0.5, 'y':0.01}
+    )
+
+    fig.update_layout(width=1200, height=800, legend_title_text ='Номер датчика',
+                        xaxis_title_text  = 'Время',  yaxis_title_text = 'Сигнал датчика', #yaxis_range=[1500, 1700], 
+                        xaxis2_title_text = 'Время', yaxis2_title_text = 'Жест', #yaxis2_range= [0 , 200],
+                        margin=dict(l=40, r=60, t=30, b=80), 
+                        showlegend=False # легенда загромождает картинку
+    )
+
+    fig.show()
