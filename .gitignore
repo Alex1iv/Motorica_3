@@ -131,3 +131,5 @@ dmypy.json
 
 *.npy
 *.pkl
+
+temp_best_model/
