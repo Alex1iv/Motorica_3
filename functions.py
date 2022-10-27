@@ -189,7 +189,7 @@ def plot_history(history):
 
 def get_gesture_prediction_plot(id_pilot, i, y_pred_train_nn_mean, mounts, plot_counter):
     """
-    Функция построения графиков: датчики ОМГ, изменение класса жеста, вероятности появления жеста и предсказание
+    Функция построения графиков: сигнал датчиков оптомиографии, изменение класса жеста, вероятности появления жеста и предсказание класса жеста.
     Агументы:
     id_pilot = 3  # номер пилота
     plot_counter = 1 # номер рисунка
@@ -251,11 +251,14 @@ def get_gesture_prediction_plot(id_pilot, i, y_pred_train_nn_mean, mounts, plot_
 
 
 
-def get_signal_derivative_plot(Pilot_id, timesteps:list, sensors:list, mounts,
-                               plot_counter=1):
-
+def get_signal_derivative_plot(Pilot_id, timesteps:list, sensors:list, mounts, plot_counter=1):
     """
-    
+    Функция построения графиков: сигнал датчиков оптомиографии, изменение класса жеста, вероятности появления жеста и предсказание
+    Агументы:
+    id_pilot = 3  # номер пилота
+    plot_counter = 1 # номер рисунка
+    i - номер наблюдениия
+    mounts - словарь с данными   
     """
     X_train=mounts[Pilot_id]['X_train']
     y_train=mounts[Pilot_id]['y_train']
@@ -280,8 +283,8 @@ def get_signal_derivative_plot(Pilot_id, timesteps:list, sensors:list, mounts,
     df_1 = pd.DataFrame(scaler.transform(df_1))
 
     fig = make_subplots(rows=2, cols=2, 
-        subplot_titles=(f'X_train - нормализованные сигналы', f'Производная нормализованных сигналов датчиков',
-        'y_train', f'Квадрат производной нормализованных сигналов датчиков'), vertical_spacing = 0.1,
+        subplot_titles=(f'X_train - сигналы датчиков', f'Производная сигналов датчиков',
+        'y_train', f'Квадрат производной сигналов датчиков'), vertical_spacing = 0.1,
     )
 
     for i in df_1.columns: 
@@ -311,6 +314,100 @@ def get_signal_derivative_plot(Pilot_id, timesteps:list, sensors:list, mounts,
     fig.update_layout(width=1200, height=800, legend_title_text ='Номер датчика',
                         xaxis_title_text  = 'Время',  yaxis_title_text = 'Сигнал датчика', #yaxis_range=[1500, 1700], 
                         xaxis2_title_text = 'Время', yaxis2_title_text = 'Жест', #yaxis2_range= [0 , 200],
+                        margin=dict(l=40, r=60, t=30, b=80), 
+                        showlegend=False # легенда загромождает картинку
+    )
+
+    fig.show()
+
+
+def get_normalized_signal_derivative_plot(Pilot_id, timesteps:list, sensors:list, mounts,
+                               plot_counter=1):
+
+    """
+    
+    """
+    X_train=mounts[Pilot_id]['X_train']
+    y_train=mounts[Pilot_id]['y_train']
+    
+    Pilot_id = 1
+    time_start = 100
+    time_end = 1450
+    sensors = list([0, 2, 5, 8, 12, 15, 17, 19, 21, 24, 27, 29, 30, 33, 36, 38
+    ])
+
+    plot_counter = 7
+
+    timesteps=[time_start, time_end]
+
+    fig = make_subplots(rows=4, cols=2, 
+                        subplot_titles=(
+                        f'Исходные сигналы датчиков', f'Нормализованные сигналы датчиков',
+                        'y_train', 'y_train',
+                        f'Производная сигналов датчиков', f'Производная нормализованных сигналов датчиков', 
+                        f'Квадрат производной сигналов датчиков', f'Квадрат производной нормализованных сигналов датчиков'
+                        ), vertical_spacing = 0.1,
+    )
+
+    df_1 = pd.DataFrame(
+        data = X_train[Pilot_id], 
+        index = [s for s in range(X_train[Pilot_id].shape[0])], 
+        columns = [s for s in range(X_train[Pilot_id].shape[1])]
+        ).iloc[timesteps[0]:timesteps[1],:][sensors]
+
+    for i in df_1.columns: 
+        fig.add_trace(go.Scatter(x=df_1.index, y=df_1[i], name=str(df[i].name)), row=1, col=1)
+
+    df_2 = pd.DataFrame(data = y_train[Pilot_id], index = [s for s in range(y_train[Pilot_id].shape[0])]).iloc[timesteps[0]:timesteps[1],:]
+
+    for i in df_2.columns: 
+        fig.add_trace(go.Scatter(x=df_2.index, y=df_2[i], name=str(df[i].name)), row=2, col=1)
+
+    df_3 = pd.DataFrame(df_1.diff(), index = range(df_1.index[0], df_1.index[-1]+1))
+
+    for i in df_3.columns: 
+        fig.add_trace(go.Scatter(x=df_3.index, y=df_3[i], name=str(df[i].name)), row=3, col=1)
+
+    #  датасет квадрата производной
+    df_4 = pd.DataFrame(np.power(df_1.diff(),2), index = range(df_1.index[0], df_1.index[-1]+1))
+
+    for i in df_4.columns: 
+        fig.add_trace(go.Scatter(x=df_4.index, y=df_4[i], name=str(df[i].name)), row=4, col=1)
+
+    # Нормализация данных
+    scaler = StandardScaler()
+    scaler.fit(df_1)
+    df_5 = pd.DataFrame(scaler.transform(df_1))
+
+    for i in df_5.columns: 
+        fig.add_trace(go.Scatter(x=df_5.index, y=df_5[i], name=str(df_5[i].name)), row=1, col=2)
+
+    #df_6 = pd.DataFrame(data = y_train[Pilot_id], index = [s for s in range(y_train[Pilot_id].shape[0])]).iloc[timesteps[0]:timesteps[1],:]
+
+    for i in df_2.columns: 
+        fig.add_trace(go.Scatter(x=df_2.index, y=df_2[i], name=str(df[i].name)), row=2, col=2)
+
+
+    df_7 = pd.DataFrame(df_5.diff(), index = range(df_5.index[0], df_5.index[-1]+1))
+
+
+    for i in df_7.columns: 
+        fig.add_trace(go.Scatter(x=df_5.index, y=df_7[i], name=str(df_5[i].name)), row=3, col=2)
+
+    #  датасет квадрата производной
+    df_8 = pd.DataFrame(np.power(df_5.diff(),2), index = range(df_5.index[0], df_5.index[-1]+1))
+
+    for i in df_8.columns: 
+        fig.add_trace(go.Scatter(x=df_5.index, y=df_8[i], name=str(df_5[i].name)), row=4, col=2)
+
+    fig.update_layout(title={'text':f'Рис. {plot_counter} - Преобразование сигнала датчиков {sensors} пилота {Pilot_id}', 'x':0.5, 'y':0.01}
+    )
+
+    fig.update_layout(width=1200, height=1200, legend_title_text =f'Номер датчика ',
+                        xaxis_title_text  = 'Время',  yaxis_title_text = 'Сигнал датчика', #yaxis_range=[0, 4000], 
+                        xaxis2_title_text = 'Время', yaxis2_title_text = 'Жест', #yaxis2_range= [0 , 8],
+                        xaxis3_title_text = 'Время', yaxis3_title_text = 'Жест', #yaxis3_range= [-1 , 8],
+                        xaxis4_title_text = 'Время', yaxis4_title_text = 'Жест', #yaxis2_range= [0 , 8],
                         margin=dict(l=40, r=60, t=30, b=80), 
                         showlegend=False # легенда загромождает картинку
     )
