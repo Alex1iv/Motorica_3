@@ -247,12 +247,12 @@ def get_gesture_prediction_plot(Pilot_id, i, y_pred_train_nn_mean, mounts, plot_
 
 def get_signal_and_train_plots(Pilot_id, timesteps:list, sensors:list, mounts, plot_counter=1):
     """
-    Функция построения графиков: сигнал датчиков оптомиографии, изменение класса жеста
-    Агументы:
-    Pilot_id - номер пилота
-    plot_counter - номер рисунка
-    i - номер наблюдениия
-    mounts - словарь с данными   
+    Функция построения графиков: сигнал датчиков оптомиографии, изменение класса жеста. Агументы:
+    Pilot_id - номер пилота;
+    timesteps - список из двух временных периодов;
+    sensors - список датчиков;
+    mounts - словарь с данными;
+    plot_counter - номер рисунка.
     """
     X_train=mounts[Pilot_id]['X_train']
     y_train=mounts[Pilot_id]['y_train']
@@ -272,9 +272,7 @@ def get_signal_and_train_plots(Pilot_id, timesteps:list, sensors:list, mounts, p
 
     
     fig = make_subplots(rows=2, cols=1, 
-        subplot_titles=(f'X_train - сигналы датчиков', 'y_train - сигнал манипулятора', 
-        #f'Производная сигналов датчиков', f'Квадрат производной сигналов датчиков'
-        ), vertical_spacing = 0.15,
+        subplot_titles=(f'X_train - сигналы датчиков', 'y_train - сигнал манипулятора'), vertical_spacing = 0.15,
     )
 
     for i in df_1.columns: 
@@ -291,13 +289,15 @@ def get_signal_and_train_plots(Pilot_id, timesteps:list, sensors:list, mounts, p
 
     fig.update_layout(width=600, height=600, legend_title_text ='Номер датчика',
                         xaxis_title_text  = 'Время',  yaxis_title_text = 'Сигнал датчика', #yaxis_range=[1500, 1700], 
-                        #xaxis2_title_text = 'Время', yaxis2_title_text = 'Сигнал датчика', #yaxis2_range= [0 , 200],
-                        xaxis2_title_text = 'Время', yaxis2_title_text = 'Жест', yaxis2_range= [-1 , 8],
-                        #xaxis4_title_text = 'Время', yaxis4_title_text = 'Сигнал датчика', #yaxis2_range= [0 , 8],
-                        margin=dict(l=40, r=60, t=30, b=80), 
+                        xaxis2_title_text = 'Время', yaxis2_title_text = 'Жест', yaxis2_range= [-1 , 5],
+                        yaxis2 = dict(
+                                    tickmode='array', #change 1
+                                    tickvals = np.arange(5), #change 2
+                                    ticktext = ['Open', 'Pistol', 'Thumb', 'OK', 'Grab']), 
+                        margin=dict(l=40, r=60, t=30, b=80),  
                         showlegend=False # легенда загромождает картинку
     )
-
+    
     #fig.show()
     fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
 
@@ -305,12 +305,13 @@ def get_signal_and_train_plots(Pilot_id, timesteps:list, sensors:list, mounts, p
 def get_signal_derivative_and_normalized_plot(Pilot_id, timesteps:list, sensors:list, mounts, plot_counter=1):
 
     """
-    Функция построения графиков: сигнал датчиков оптомиографии, изменение класса жеста, вероятности появления жеста и предсказание
+    Функция построения графиков: сигнал датчиков оптомиографии, изменение класса жеста, вероятности появления жеста и предсказание.
     Агументы:
-    Pilot_id - номер пилота
-    plot_counter - номер рисунка
-    i - номер наблюдениия
-    mounts - словарь с данными
+    Pilot_id - номер пилота;
+    timesteps - список из двух временных периодов;
+    sensors - список датчиков;
+    mounts - словарь с данными;
+    plot_counter - номер рисунка.
     """
     X_train=mounts[Pilot_id]['X_train']
         
