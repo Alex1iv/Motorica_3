@@ -292,7 +292,7 @@ def get_signal_and_train_plots(Pilot_id, timesteps:list, sensors:list, mounts, p
     'x':0.5, 'y':0.01}
     )
 
-    fig.update_layout(width=400, height=800, legend_title_text ='Номер датчика',
+    fig.update_layout(width=600, height=800, legend_title_text ='Номер датчика',
                         xaxis_title_text  = 'Время',  yaxis_title_text = 'Сигнал датчика', #yaxis_range=[1500, 1700], 
                         #xaxis2_title_text = 'Время', yaxis2_title_text = 'Сигнал датчика', #yaxis2_range= [0 , 200],
                         xaxis2_title_text = 'Время', yaxis2_title_text = 'Жест', yaxis2_range= [-1 , 8],
