@@ -251,7 +251,7 @@ def get_gesture_prediction_plot(id_pilot, i, y_pred_train_nn_mean, mounts, plot_
 
 
 
-def get_signal_derivative_plot(Pilot_id, time_start, time_end, sensors:list, mounts,
+def get_signal_derivative_plot(Pilot_id, timesteps:list, sensors:list, mounts,
                                plot_counter=1):
 
     """
@@ -260,8 +260,7 @@ def get_signal_derivative_plot(Pilot_id, time_start, time_end, sensors:list, mou
     X_train=mounts[Pilot_id]['X_train']
     y_train=mounts[Pilot_id]['y_train']
 
-    # объединяем timesteps
-    timesteps=[time_start, time_end]
+    
     df_1 = pd.DataFrame(
         data = X_train, 
         index = [s for s in range(X_train.shape[0])], 
@@ -281,8 +280,8 @@ def get_signal_derivative_plot(Pilot_id, time_start, time_end, sensors:list, mou
     df_1 = pd.DataFrame(scaler.transform(df_1))
 
     fig = make_subplots(rows=2, cols=2, 
-        subplot_titles=(f'X_train - нормализованные сигналы', 'y_train', 
-        f'Производная нормализованных сигналов датчиков', f'Квадрат производной нормализованных сигналов датчиков'), vertical_spacing = 0.1,
+        subplot_titles=(f'X_train - нормализованные сигналы', f'Производная нормализованных сигналов датчиков',
+        'y_train', f'Квадрат производной нормализованных сигналов датчиков'), vertical_spacing = 0.1,
     )
 
     for i in df_1.columns: 
