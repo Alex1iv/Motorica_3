@@ -84,9 +84,6 @@ def get_all_sensors_plot(Pilot_id, timesteps:list, mounts, plot_counter=1):
     
     X_train=mounts[Pilot_id]['X_train']
 
-    # df = pd.DataFrame(data = X_train[Pilot_id], index = [s for s in range(X_train[Pilot_id].shape[0])], 
-    #                     columns = [s for s in range(X_train[Pilot_id].shape[1])]
-    # )
     df = pd.DataFrame(
         data = X_train, 
         index = [s for s in range(X_train.shape[0])], 
@@ -277,7 +274,7 @@ def get_signal_and_train_plots(Pilot_id, timesteps:list, sensors:list, mounts, p
     fig = make_subplots(rows=2, cols=1, 
         subplot_titles=(f'X_train - сигналы датчиков', 'y_train - сигнал манипулятора', 
         #f'Производная сигналов датчиков', f'Квадрат производной сигналов датчиков'
-        ), vertical_spacing = 0.1,
+        ), vertical_spacing = 0.15,
     )
 
     for i in df_1.columns: 
@@ -292,7 +289,7 @@ def get_signal_and_train_plots(Pilot_id, timesteps:list, sensors:list, mounts, p
     'x':0.5, 'y':0.01}
     )
 
-    fig.update_layout(width=600, height=800, legend_title_text ='Номер датчика',
+    fig.update_layout(width=600, height=600, legend_title_text ='Номер датчика',
                         xaxis_title_text  = 'Время',  yaxis_title_text = 'Сигнал датчика', #yaxis_range=[1500, 1700], 
                         #xaxis2_title_text = 'Время', yaxis2_title_text = 'Сигнал датчика', #yaxis2_range= [0 , 200],
                         xaxis2_title_text = 'Время', yaxis2_title_text = 'Жест', yaxis2_range= [-1 , 8],
@@ -328,13 +325,12 @@ def get_signal_derivative_and_normalized_plot(Pilot_id, timesteps:list, sensors:
     scaler.fit(df_1)
     df_2 = pd.DataFrame(scaler.transform(df_1), index = range(df_1.index[0], df_1.index[-1]+1))
        
-    fig = make_subplots(rows=2, cols=2, 
-                        subplot_titles=(
-                        #f'Исходные сигналы датчиков', f'Нормализованные сигналы датчиков',
-                        #'y_train', 'y_train',
-                        f'Производная сигналов датчиков', f'Производная нормализованных сигналов датчиков', 
-                        f'Квадрат производной сигналов датчиков', f'Квадрат производной нормализованных сигналов датчиков'
-                        ), vertical_spacing = 0.1,
+    fig = make_subplots(
+        rows=2, cols=2, 
+        subplot_titles=(
+            f'Производная сигналов датчиков', f'Производная нормализованных сигналов датчиков', 
+            f'Квадрат производной сигналов датчиков', f'Квадрат производной нормализованных сигналов датчиков'
+        ), vertical_spacing = 0.1,
     )
 
 
