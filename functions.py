@@ -96,20 +96,20 @@ def get_all_sensors_plot(Pilot_id, timesteps:list, mounts, plot_counter=1):
     fig = px.line(data_frame=df.iloc[timesteps[0]:timesteps[1],:])
     
     fig.update_layout(
-        title=dict(text=f'Рис. {plot_counter}'+' - наблюдение ' + str(Pilot_id), x=.5, y=0.05, xanchor='center'), 
-        xaxis_title_text = 'Время, сек', yaxis_title_text = 'Показатель', # yaxis_range = [0, 3000],
+        title=dict(text=f'Рис. {plot_counter} - сигналы датчиков пилота {Pilot_id}', x=.5, y=0.05, xanchor='center'), 
+        xaxis_title_text = 'Время, сек', yaxis_title_text = 'Сигнал датчиков', # yaxis_range = [0, 3000],
         legend_title_text='Индекс <br>датчика',
         width=600, height=400,
         margin=dict(l=100, r=60, t=80, b=100),
     )
 
-    fig.show()
+    #fig.show()
 
     # сохраним результат в папке figures. Если такой папки нет, то создадим её
     if not os.path.exists("figures"):
         os.mkdir("figures")
 
-    #fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
+    fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
 
 
 def get_active_passive_sensors_plot(Pilot_id, timesteps:list, mounts, plot_counter=1):
@@ -162,9 +162,9 @@ def get_active_passive_sensors_plot(Pilot_id, timesteps:list, mounts, plot_count
                         #showlegend=False # легенда загромождает картинку
     )
 
-    fig.show()
+    #fig.show()
 
-    #fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
+    fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
 
 def plot_history(history):
     
@@ -247,16 +247,6 @@ def get_gesture_prediction_plot(Pilot_id, i, y_pred_train_nn_mean, mounts, plot_
     plt.tight_layout()
 
 
-#Pilot_id = 1
-#time_start = 100
-#time_end = 600
-#sensors = list([0, 2, #5, 8, 12, 15, 17, 19, 21, 24, 27, 29, 30, 33, 36, 38
-#])
-
-#plot_counter = 6
-
-
-
 
 def get_signal_and_train_plots(Pilot_id, timesteps:list, sensors:list, mounts, plot_counter=1):
     """
@@ -284,7 +274,7 @@ def get_signal_and_train_plots(Pilot_id, timesteps:list, sensors:list, mounts, p
     ).iloc[timesteps[0]:timesteps[1],:]
 
     
-    fig = make_subplots(rows=1, cols=2, 
+    fig = make_subplots(rows=2, cols=1, 
         subplot_titles=(f'X_train - сигналы датчиков', 'y_train - сигнал манипулятора', 
         #f'Производная сигналов датчиков', f'Квадрат производной сигналов датчиков'
         ), vertical_spacing = 0.1,
@@ -295,14 +285,14 @@ def get_signal_and_train_plots(Pilot_id, timesteps:list, sensors:list, mounts, p
     
 
     for i in df_2.columns: 
-        fig.add_trace(go.Scatter(x=df_1.index, y=df_2[i], name=str(df_1[i].name)), row=1, col=2)
+        fig.add_trace(go.Scatter(x=df_1.index, y=df_2[i], name=str(df_1[i].name)), row=2, col=1)
 
     
     fig.update_layout(title={'text':f'Рис. {plot_counter} - Cигналы датчиков {sensors} пилота {Pilot_id} и сигнал манипулятора', 
     'x':0.5, 'y':0.01}
     )
 
-    fig.update_layout(width=1000, height=400, legend_title_text ='Номер датчика',
+    fig.update_layout(width=400, height=800, legend_title_text ='Номер датчика',
                         xaxis_title_text  = 'Время',  yaxis_title_text = 'Сигнал датчика', #yaxis_range=[1500, 1700], 
                         #xaxis2_title_text = 'Время', yaxis2_title_text = 'Сигнал датчика', #yaxis2_range= [0 , 200],
                         xaxis2_title_text = 'Время', yaxis2_title_text = 'Жест', yaxis2_range= [-1 , 8],
@@ -311,7 +301,8 @@ def get_signal_and_train_plots(Pilot_id, timesteps:list, sensors:list, mounts, p
                         showlegend=False # легенда загромождает картинку
     )
 
-    fig.show()
+    #fig.show()
+    fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
 
 
 def get_signal_derivative_and_normalized_plot(Pilot_id, timesteps:list, sensors:list, mounts, plot_counter=1):
@@ -380,4 +371,5 @@ def get_signal_derivative_and_normalized_plot(Pilot_id, timesteps:list, sensors:
                         showlegend=False # легенда загромождает картинку
     )
 
-    fig.show()
+    #fig.show()
+    fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
