@@ -9,10 +9,6 @@ __________________________________________
 
 Используемые в ноутбуке функции приведены в файле [functions.py](https://github.com/Alex1iv/Motorica_3/blob/main/functions.py), который должен находиться в той же папке, что и [*1_EDA_sprint_3.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/1_EDA_sprint_3.ipynb).
 
-
-**Возможно что-то еще нужно дописать после доработки файла**  
-
-
 **2)** В файле [*2_model_SRNN_LSTM.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/2_model_SRNN_LSTM.ipynb) развит подход к решению задачи на базе **baseline** с применением двух моделей нейросети. 
 
 В первой части ноутбука данные загружаются из архива и преобразуются с помощью библиотеки [*mne*](https://mne.tools/stable/index.html) для последующей подачи данных на обучение. Далее последовательно обучаются две модели: 
