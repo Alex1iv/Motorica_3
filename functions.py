@@ -297,21 +297,7 @@ def get_signal_and_train_plots(Pilot_id, timesteps:list, sensors:list, mounts, p
     for i in df_2.columns: 
         fig.add_trace(go.Scatter(x=df_1.index, y=df_2[i], name=str(df_1[i].name)), row=1, col=2)
 
-    """
-    df_3 = pd.DataFrame(df_1.diff(), index = range(df_1.index[0], df_1.index[-1]+1))
-
-
-    for i in df_3.columns: 
-        fig.add_trace(go.Scatter(x=df_3.index, y=df_3[i], name=str(df_1[i].name)), row=1, col=2)
-
-
-    #  датасет квадрата производной
- 
-    df_4 = pd.DataFrame(np.power(df_1.diff(),2), index = range(df_1.index[0], df_1.index[-1]+1))
-
-    for i in df_4.columns: 
-        fig.add_trace(go.Scatter(x=df_1.index, y=df_4[i], name=str(df_4[i].name)), row=2, col=2)
-    """
+    
     fig.update_layout(title={'text':f'Рис. {plot_counter} - Cигналы датчиков {sensors} пилота {Pilot_id} и сигнал манипулятора', 
     'x':0.5, 'y':0.01}
     )
@@ -339,14 +325,17 @@ def get_signal_derivative_and_normalized_plot(Pilot_id, timesteps:list, sensors:
     mounts - словарь с данными
     """
     X_train=mounts[Pilot_id]['X_train']
-    #y_train=mounts[Pilot_id]['y_train']
-
-    
+        
     df_1 = pd.DataFrame(
         data = X_train, 
         index = [s for s in range(X_train.shape[0])], 
         columns = [s for s in range(X_train.shape[1])]
     ).iloc[timesteps[0]:timesteps[1],:][sensors]
+
+    # Нормализация данных
+    scaler = StandardScaler()
+    scaler.fit(df_1)
+    df_2 = pd.DataFrame(scaler.transform(df_1), index = range(df_1.index[0], df_1.index[-1]+1))
        
     fig = make_subplots(rows=2, cols=2, 
                         subplot_titles=(
@@ -368,16 +357,7 @@ def get_signal_derivative_and_normalized_plot(Pilot_id, timesteps:list, sensors:
 
     for i in df_4.columns: 
         fig.add_trace(go.Scatter(x=df_1.index, y=df_4[i], name=str(df_1[i].name)), row=2, col=1)
-
-    
-    #df_5 = pd.DataFrame(scaler.transform(df_1), index = range(df_1.index[0], df_1.index[-1]+1))
-
-    #df_7 = pd.DataFrame(df_5.diff(), index = range(df_5.index[0], df_5.index[-1]+1))+
-    
-    # Нормализация данных
-    scaler = StandardScaler()
-    scaler.fit(df_1)
-    df_2 = pd.DataFrame(scaler.transform(df_1), index = range(df_1.index[0], df_1.index[-1]+1))
+   
 
     for i in df_2.columns: 
         fig.add_trace(go.Scatter(x=df_1.index, y=df_2[i], name=str(df_2[i].name)), row=1, col=2)
@@ -391,7 +371,7 @@ def get_signal_derivative_and_normalized_plot(Pilot_id, timesteps:list, sensors:
     fig.update_layout(title={'text':f'Рис. {plot_counter} - Преобразование сигнала датчиков {sensors} пилота {Pilot_id}', 'x':0.5, 'y':0.01}
     )
 
-    fig.update_layout(width=1000, height=800, legend_title_text =f'Номер датчика ',
+    fig.update_layout(width=1200, height=800, legend_title_text =f'Номер датчика ',
                         xaxis_title_text  = 'Время',  yaxis_title_text = 'Сигнал датчика', #yaxis_range=[0, 4000], 
                         xaxis2_title_text = 'Время', yaxis2_title_text = 'Нормализованный сигнал датчика', #yaxis2_range= [0 , 8],
                         xaxis3_title_text = 'Время', yaxis3_title_text = 'Сигнал датчика', #yaxis3_range= [-1 , 8],
