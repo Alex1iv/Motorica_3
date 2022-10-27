@@ -37,63 +37,60 @@ gestures = ['"open"',  # 0
 ]
 
 
-
-
-def privet(name):   # print 'privet' to a given name
-    print(f'privet {name}')
-
-def get_sensor_list(Pilot_id, X_train, print_active=False):
+def get_sensor_list(Pilot_id, mounts, print_active=False):
     """
     Функция печати и импорта в память всех номеров датчиков
     Аргументы функции:
     Pilot_id - номер пилота,
-    X_train - обучающая выборка. 
+    mounts - словарь с данными. 
     """
-    
-    df = pd.DataFrame(data = X_train[Pilot_id], index = [s for s in range(X_train[Pilot_id].shape[0])], 
-                        columns = [s for s in range(X_train[Pilot_id].shape[1])]
+    X_train=mounts[Pilot_id]['X_train']
+
+    df = pd.DataFrame(
+        data = X_train, 
+        index = [s for s in range(X_train.shape[0])], 
+        columns = [s for s in range(X_train.shape[1])]
     ).T
+
     
     # Создадим список индексов активных и пассивных датчиков. Среднее значение сигнала не превышает 200 единиц.
     active_sensors, passive_sensors = list(), list()
-    #reliable_sensors, unreliable_sensors =  list(), list()
-    
+      
     for i in range(df.shape[0]):
-        # если средняя амплитуда превышает 200, то добавляем индекс в 'active_sensors'
+        # если средняя амплитуда превышает 200, то добавляем индекс в список 'active_sensors' (надежных датчиков). 
         if df.iloc[i].mean() > 200:
             active_sensors.append(i)
-                   
-            # Если разница между абсолютными средними значениями за последние 15 сек и первые 60 сек превышает 200,
-            # то датчики заносим в список надежных. Остальные датчики с малой амплитудой - в список ненадёжных. 
-        #     if abs(df.iloc[i][0:49].mean() - df.iloc[i][85:].mean()) > 200:
-        #         reliable_sensors.append(i)
-        #     else:
-        #         unreliable_sensors.append(i)
+        
+        #Остальные датчики с малой амплитудой - в список ненадёжных.      
         else:
             passive_sensors.append(i)
 
     if print_active is True:
         print(f"Активные датчики пилота " + str(Pilot_id) + ": ", active_sensors)
-        print(f"Пассивные датчики пилота " + str(Pilot_id) + ": ", passive_sensors)
-    #elif print_reliable is True:
-    #    print(f"Датчики с большой амплитудой, наблюдения " + str(id) +": ", reliable_sensors)
-    #    print(f"Датчики с малой амплитудой, " + str(id) +": ", unreliable_sensors)  
+        print(f"Пассивные датчики пилота " + str(Pilot_id) + ": ", passive_sensors) 
     
     return active_sensors, passive_sensors #, reliable_sensors, unreliable_sensors
 
 
 
-def get_all_sensors_plot(Pilot_id, timesteps:list, X_train, plot_counter=1):
+def get_all_sensors_plot(Pilot_id, timesteps:list, mounts, plot_counter=1):
     """
     Функция построения диаграммы показаний датчиков заданного временного периода. Аргументы функции:
     Pilot_id - номер пилота;
-    timesteps - временной период;
-    X_train - обучающая выборка;
+    timesteps - лист из двух временны периодов;
+    mounts - словарь с данными;
     plot_counter - порядковый номер рисунка.
     """
     
-    df = pd.DataFrame(data = X_train[Pilot_id], index = [s for s in range(X_train[Pilot_id].shape[0])], 
-                        columns = [s for s in range(X_train[Pilot_id].shape[1])]
+    X_train=mounts[Pilot_id]['X_train']
+
+    # df = pd.DataFrame(data = X_train[Pilot_id], index = [s for s in range(X_train[Pilot_id].shape[0])], 
+    #                     columns = [s for s in range(X_train[Pilot_id].shape[1])]
+    # )
+    df = pd.DataFrame(
+        data = X_train, 
+        index = [s for s in range(X_train.shape[0])], 
+        columns = [s for s in range(X_train.shape[1])]
     )
     
     fig = px.line(data_frame=df.iloc[timesteps[0]:timesteps[1],:])
@@ -115,21 +112,31 @@ def get_all_sensors_plot(Pilot_id, timesteps:list, X_train, plot_counter=1):
     #fig.write_image(f'figures/fig_{plot_counter}.png', engine="kaleido")
 
 
-def get_active_passive_sensors_plot(Pilot_id, X_train, time_start=0, time_end=500, plot_counter=1):
+def get_active_passive_sensors_plot(Pilot_id, timesteps:list, mounts, plot_counter=1):
     """
-    Функция построения графика показаний активных и пассивных датчиков.
-    Аргумент функции:
-    id - номер наблюдения;
-    X_train - обучающая выборка;
+    Функция построения графика показаний активных и пассивных датчиков. Аргументы функции:
+    Pilot_id - номер пилота;
+    timesteps - лист из двух временны периодов;
+    mounts - словарь с данными;
     plot_counter - порядковый номер рисунка.  
     """
+    X_train=mounts[Pilot_id]['X_train']
+
+    df = pd.DataFrame(
+        data = X_train, 
+        index = [s for s in range(X_train.shape[0])], 
+        columns = [s for s in range(X_train.shape[1])]
+    )
+
     # списки сенсоров
-    active_sensors, passive_sensors = get_sensor_list(Pilot_id, X_train)  #, print_active=True
+    active_sensors, passive_sensors = get_sensor_list(Pilot_id, mounts)  #, print_active=True
 
-    timesteps=[time_start, time_end]
+    #timesteps=[time_start, time_end]
 
-    df = pd.DataFrame(data = X_train[Pilot_id], index = [s for s in range(X_train[Pilot_id].shape[0])], 
-                        columns = [s for s in range(X_train[Pilot_id].shape[1])]
+    df = pd.DataFrame(
+        data = X_train, 
+        index = [s for s in range(X_train.shape[0])], 
+        columns = [s for s in range(X_train.shape[1])]
     ).iloc[timesteps[0]:timesteps[1],:]
     
         
@@ -145,11 +152,11 @@ def get_active_passive_sensors_plot(Pilot_id, X_train, time_start=0, time_end=50
 
     for i in df_2.columns: fig.add_trace(go.Scatter(x=df_2.index, y=df_2[i], name=str(df[i].name)), row=1, col=2)
 
-    fig.update_layout(title={'text':f'Рис. {plot_counter}'+' - Активные и пассивные датчики пилота ' + str(Pilot_id), 'x':0.5, 'y':0.05}
+    fig.update_layout(title={'text':f'Рис. {plot_counter} - Активные и пассивные датчики пилота {Pilot_id} в период {timesteps[0],timesteps[1]}', 'x':0.5, 'y':0.05}
     )
 
     fig.update_layout(width=1000, height=400, legend_title_text ='Номер датчика',
-                        xaxis_title_text  = 'Время',  yaxis_title_text = 'Сигнал датчика', yaxis_range=  [0, 3500], 
+                        xaxis_title_text  = 'Время',  yaxis_title_text = 'Сигнал датчика', yaxis_range=  [0, 4000], 
                         xaxis2_title_text = 'Время', yaxis2_title_text = 'Сигнал датчика', yaxis2_range= [0 , 200],
                         margin=dict(l=100, r=60, t=80, b=100), 
                         #showlegend=False # легенда загромождает картинку
@@ -187,24 +194,24 @@ def plot_history(history):
 
     #fig.show()
 
-def get_gesture_prediction_plot(id_pilot, i, y_pred_train_nn_mean, mounts, plot_counter):
+def get_gesture_prediction_plot(Pilot_id, i, y_pred_train_nn_mean, mounts, plot_counter):
     """
     Функция построения графиков: сигнал датчиков оптомиографии, изменение класса жеста, вероятности появления жеста и предсказание класса жеста.
     Агументы:
-    id_pilot = 3  # номер пилота
+    Pilot_id = 3  # номер пилота
     plot_counter = 1 # номер рисунка
     i - номер наблюдениия
     mounts - словарь с данными
     """
     
-    mount = mounts[id_pilot]         # выбираем номер пилота
+    mount = mounts[Pilot_id]         # выбираем номер пилота
     X_train_nn = mount['X_train_nn']
     y_train_nn = mount['y_train_nn']
     #y_pred_train_nn = mount['y_pred_train_nn']
-    #y_pred_train_nn_mean = np.mean(x_trn_pred_dict[id_pilot], axis=0)
+    #y_pred_train_nn_mean = np.mean(x_trn_pred_dict[Pilot_id], axis=0)
 
     fig, ax = plt.subplots(4, 1, sharex=True, figsize=(10, 8))
-    plt.suptitle(f'Рис. {plot_counter} - наблюдение {i} пилота {id_pilot}' , y=-0.01, fontsize=16)
+    plt.suptitle(f'Рис. {plot_counter} - наблюдение {i} пилота {Pilot_id}' , y=-0.01, fontsize=16)
     
     plt.subplots_adjust(  left=0.1,   right=0.9,
                         bottom=0.1,     top=0.9,
@@ -255,7 +262,7 @@ def get_signal_derivative_plot(Pilot_id, timesteps:list, sensors:list, mounts, p
     """
     Функция построения графиков: сигнал датчиков оптомиографии, изменение класса жеста, вероятности появления жеста и предсказание
     Агументы:
-    id_pilot = 3  # номер пилота
+    Pilot_id = 3  # номер пилота
     plot_counter = 1 # номер рисунка
     i - номер наблюдениия
     mounts - словарь с данными   
@@ -313,7 +320,9 @@ def get_signal_derivative_plot(Pilot_id, timesteps:list, sensors:list, mounts, p
 
     fig.update_layout(width=1200, height=800, legend_title_text ='Номер датчика',
                         xaxis_title_text  = 'Время',  yaxis_title_text = 'Сигнал датчика', #yaxis_range=[1500, 1700], 
-                        xaxis2_title_text = 'Время', yaxis2_title_text = 'Жест', #yaxis2_range= [0 , 200],
+                        xaxis2_title_text = 'Время', yaxis2_title_text = 'Сигнал датчика', #yaxis2_range= [0 , 200],
+                        xaxis3_title_text = 'Время', yaxis3_title_text = 'Жест', yaxis3_range= [-1 , 8],
+                        xaxis4_title_text = 'Время', yaxis4_title_text = 'Сигнал датчика', #yaxis2_range= [0 , 8],
                         margin=dict(l=40, r=60, t=30, b=80), 
                         showlegend=False # легенда загромождает картинку
     )
@@ -356,7 +365,7 @@ def get_normalized_signal_derivative_plot(Pilot_id, timesteps:list, sensors:list
         ).iloc[timesteps[0]:timesteps[1],:][sensors]
 
     for i in df_1.columns: 
-        fig.add_trace(go.Scatter(x=df_1.index, y=df_1[i], name=str(df[i].name)), row=1, col=1)
+        fig.add_trace(go.Scatter(x=df_1.index, y=df_1[i], name=str(df_1[i].name)), row=1, col=1)
 
     df_2 = pd.DataFrame(data = y_train[Pilot_id], index = [s for s in range(y_train[Pilot_id].shape[0])]).iloc[timesteps[0]:timesteps[1],:]
 
