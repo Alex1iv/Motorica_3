@@ -15,9 +15,15 @@ __________________________________________
 
 **2)** В файле [*2_model_SRNN_LSTM.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/2_model_SRNN_LSTM.ipynb) развит подход к решению задачи на базе **baseline** с применением двух моделей нейросети. 
 
+<<<<<<< HEAD
 В первой части ноутбука данные загружаются из архива и преобразуются с помощью библиотеки mne для последующей подачи данных на обучение. Далее последовательно обучаются две модели: 
 
 - SimpleRNN (первая модель на базе слоя SimpleRNN библиотеки Keras); 
+=======
+В первой части ноутбука данные загружаются из архива и преобразуются с помощью библиотеки [*mne*](https://mne.tools/stable/index.html) для последующей подачи данных на обучение. Далее последовательно обучаются две модели: 
+
+- SimpleRNN (первая модель на базе слоя SimpleRNN библиотеки [*Keras*](https://keras.io/); 
+>>>>>>> 2086338b4668dfc6457c7ece3162862f93951bd5
 
 - LSTM (вторая модель, в ее основе лежат несколько слоев LSTM библиотеки Keras и дополнительный Dense-слой). 
 
@@ -37,7 +43,7 @@ __________________________________________
 
 В ноутбуке оставлены закомментированные ячейки с пометками и пояснениями для сохранения возможности запуска в Google Colab.
 
-**3)** В ноутбуке [*3_embeddings.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/3_embeddings.ipynb) реализован предикт тестовых данных на модели, обученной для каждого пилота.
+**3)** В ноутбуке [*3_embeddings.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/3_embeddings.ipynb) реализовано предсказание тестовых данных на модели, обученной для каждого пилота.
 
 **4)** Файл [*4_boxplots_clear_gests_sens_gest.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/4_boxplots_clear_gests_sens_gest.ipynb) с построением боксплотов "Статистика изменения характерных уровней датчиков в течение снятия показаний в разрезе жестов для выбранного пилота. Очищенные данные" и папка [*boxplots*](https://github.com/Alex1iv/Motorica_3/tree/main/boxplots) с боксплотами, построенными для всех пилотов. В том числе [*boxplots_sens_gest_pylot2_with_beaten.png*](https://github.com/Alex1iv/Motorica_3/blob/main/boxplots/boxplots_sens_gest_pylot2_with_beaten.png), построенный по данным 2-го пилота, еще не очищенным от битых участков. Обсуждение наблюдений - в общем файле с EDA [*1_EDA_sprint_3.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/1_EDA_sprint_3.ipynb).
 
