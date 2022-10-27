@@ -262,8 +262,8 @@ def get_signal_derivative_plot(Pilot_id, timesteps:list, sensors:list, mounts, p
     """
     Функция построения графиков: сигнал датчиков оптомиографии, изменение класса жеста, вероятности появления жеста и предсказание
     Агументы:
-    Pilot_id = 3  # номер пилота
-    plot_counter = 1 # номер рисунка
+    Pilot_id - номер пилота
+    plot_counter - номер рисунка
     i - номер наблюдениия
     mounts - словарь с данными   
     """
@@ -287,7 +287,7 @@ def get_signal_derivative_plot(Pilot_id, timesteps:list, sensors:list, mounts, p
     # Нормализация данных
     scaler = StandardScaler()
     scaler.fit(df_1)
-    df_1 = pd.DataFrame(scaler.transform(df_1))
+    #df_1 = pd.DataFrame(scaler.transform(df_1))
 
     fig = make_subplots(rows=2, cols=2, 
         subplot_titles=(f'X_train - сигналы датчиков', f'Производная сигналов датчиков',
@@ -306,9 +306,11 @@ def get_signal_derivative_plot(Pilot_id, timesteps:list, sensors:list, mounts, p
 
 
     for i in df_3.columns: 
-        fig.add_trace(go.Scatter(x=df_1.index, y=df_1[i], name=str(df_1[i].name)), row=1, col=2)
+        fig.add_trace(go.Scatter(x=df_3.index, y=df_3[i], name=str(df_1[i].name)), row=1, col=2)
+
 
     #  датасет квадрата производной
+ 
     df_4 = pd.DataFrame(np.power(df_1.diff(),2), index = range(df_1.index[0], df_1.index[-1]+1))
 
     for i in df_4.columns: 
