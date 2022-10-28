@@ -3,7 +3,7 @@
 ### [Kaggle competition](https://www.kaggle.com/competitions/motorica-advanced-gesture-classification/leaderboard?)
 __________________________________________
 
-Проект реализован в последовательности ноутбуков и набора файлов:
+Проект реализован в последовательности ноутбуков и файлов:
 
 **1)** [*1_EDA_sprint_3.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/1_EDA_sprint_3.ipynb) - EDA с анализом тренировочных и тестовых данных до начала работы с моделью, в т.ч. анализ показаний датчиков и жестов.
 
@@ -41,7 +41,7 @@ __________________________________________
 
 **5)** [*5_rnn_baseline.ipynb*](https://github.com/Alex1iv/Motorica_3/blob/main/5_rnn_baseline.ipynb) - ноутбук, предоставленный организаторами соревнования в качестве **baseline**.   
 
-**6)** Папка [*data*](https://github.com/Alex1iv/Motorica_3/tree/main/data) содержит [архив](https://github.com/Alex1iv/Motorica_3/blob/main/data/motorica-advanced-gesture-classification.zip) с исходными данными:
+**6)** Папка [*data*](https://github.com/Alex1iv/Motorica_3/tree/main/data) содержит [архив](https://github.com/Alex1iv/Motorica_3/tree/main/data) с исходными данными:
 
 - *X_train_1.npy*, *X_train_2.npy*, *X_train_3.npy*: файлы с тренировочными данными ("фичи", показания датчиков по каждому "пилоту");
 
