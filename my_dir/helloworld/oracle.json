@@ -1,0 +1,1 @@
+{"ongoing_trials": {"tuner0": "0"}, "hyperparameters": {"space": [{"class_name": "Int", "config": {"name": "units", "default": null, "conditions": [], "min_value": 32, "max_value": 512, "step": 32, "sampling": null}}], "values": {"units": 32}}, "seed": 6312, "seed_state": 6313, "tried_so_far": ["d24b6a4533b58780c944782269c062b3"]}

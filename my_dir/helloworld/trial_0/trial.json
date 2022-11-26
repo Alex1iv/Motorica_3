@@ -1,0 +1,1 @@
+{"trial_id": "0", "hyperparameters": {"space": [{"class_name": "Int", "config": {"name": "units", "default": null, "conditions": [], "min_value": 32, "max_value": 512, "step": 32, "sampling": null}}], "values": {"units": 128}}, "metrics": {"metrics": {}}, "score": null, "best_step": 0, "status": "RUNNING"}
